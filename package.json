@@ -1,0 +1,33 @@
+{
+  "name": "authorization",
+  "version": "1.0.0",
+  "description": "NodeJS authorization module",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KucherenkoIvan/Authorization.git"
+  },
+  "keywords": [
+    "authorization",
+    "node",
+    "js",
+    "nodejs"
+  ],
+  "author": "Kucherenko Ivan <stysha.72@mail.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KucherenkoIvan/Authorization/issues"
+  },
+  "homepage": "https://github.com/KucherenkoIvan/Authorization#readme",
+  "dependencies": {
+    "argon2": "^0.27.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "pg": "^8.5.1"
+  }
+}
