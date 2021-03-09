@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "start": "node ./src/index.js",
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "migrations": "node ./src/migrations.js"
   },
   "repository": {
     "type": "git",
@@ -25,9 +26,13 @@
   },
   "homepage": "https://github.com/KucherenkoIvan/Authorization#readme",
   "dependencies": {
-    "argon2": "^0.27.1",
+    "bcrypt": "^5.0.1",
     "express": "^4.17.1",
-    "nodemon": "^2.0.7",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.1",
     "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
