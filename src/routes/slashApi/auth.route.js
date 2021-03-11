@@ -9,6 +9,7 @@ const validators = [
   require('../../middlewares/validation/password/password'),
   require('../../middlewares/validation/login/login'),
 ]
+const alValidator = require('../../middlewares/validation/accesslevel/accesslevel');
 
 const router = express.Router();
 
@@ -31,7 +32,8 @@ router.post('/authorize', validators, async (req, res) => {
     const token = await jwt.sign(
       {
         id: candidate.id,
-        login
+        login,
+        accessLevel: candidate.accessLevel,
       },
       config.jwtsecret,
       {
@@ -55,7 +57,7 @@ router.post('/register', validators, async (req, res) => {
 
   const pwdHash = await argon.hash(saltPwd);
 
-  const newUser = await db.insert({ login, password: pwdHash, salt: customSalt }).into('userdata');
+  const newUser = await db.insert({ login, password: pwdHash, salt: customSalt, accessLevel: 'user' }).into('userdata');
   res.status(200).json({ newUser });
 });
 

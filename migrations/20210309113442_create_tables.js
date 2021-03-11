@@ -12,6 +12,7 @@ exports.up = function(knex) {
       table.string('login').notNullable().unique();
       table.string('password').notNullable();
       table.string('salt').notNullable();
+      table.integer('accessLevel').notNullable();
     });
 };
 
