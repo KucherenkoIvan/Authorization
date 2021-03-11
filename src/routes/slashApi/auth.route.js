@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const argon = require('argon2');
 const db = require('../../db');
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config.json');
@@ -14,7 +15,7 @@ const router = express.Router();
 router.post('/authorize', validators, async (req, res) => {
   const { login, password } = req.body;
 
-  const candidate = await db.select().from('userdata').where('login', '=', login)[0];
+  const candidate = (await db.select().from('userdata').where('login', '=', login))[0];
 
   if (!candidate) {
     return res.status(500).json({
@@ -22,10 +23,21 @@ router.post('/authorize', validators, async (req, res) => {
     })
   }
 
-  const match = await bcrypt.compare(password, candidate.password);
+  const saltpwd = password + config.staticSalt + candidate.salt;
+
+  const match = await argon.verify(candidate.password, saltpwd);
 
   if (match) {
-    const token = await jwt.sign({id: candidate.id, login, group: candidate.group }, 'kinda key', { algorithm: 'RS256' });
+    const token = await jwt.sign(
+      {
+        id: candidate.id,
+        login
+      },
+      config.jwtsecret,
+      {
+        expiresIn: '1h',
+      }
+    );
     return res.status(200).json({ token });
   }
   else 
@@ -35,22 +47,16 @@ router.post('/authorize', validators, async (req, res) => {
 });
 
 router.post('/register', validators, async (req, res) => {
-  const { login, password, group } = req.body;
-
-  const groupObj = await db.select().from('usergroup').where('id', '=', group);
-
-  if (!groupObj) {
-    return res.status(500).json({
-      msg: 'Invalid group'
-    });
-  }
+  const { login, password } = req.body;
   
   const customSalt = await bcrypt.genSalt(42);
 
-  const pwdHash = await bcrypt.hash(password, customSalt + config.staticSalt);
+  const saltPwd = password + config.staticSalt + customSalt;
 
-  const someshit = await db.insert({ login, password: pwdHash, group: groupObj.id, salt: customSalt }).into('userdata');
-  res.status(200).json({ someshit });
+  const pwdHash = await argon.hash(saltPwd);
+
+  const newUser = await db.insert({ login, password: pwdHash, salt: customSalt }).into('userdata');
+  res.status(200).json({ newUser });
 });
 
 module.exports = router;

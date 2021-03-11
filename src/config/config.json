@@ -1,4 +1,4 @@
 {
-  "staticSalt": "let-me-die",
+  "staticSalt": 3301,
   "jwtsecret": "not a secret at all"
 }
