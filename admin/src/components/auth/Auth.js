@@ -25,7 +25,7 @@ export default function Auth(props){
   return(
     <div className="auth_div">
       <Typography className="auth_title" variant="h5" color="primary">
-        Авторизация
+        Вход в систему
       </Typography>
       <FormControl>
         <InputLabel htmlFor="user_name">

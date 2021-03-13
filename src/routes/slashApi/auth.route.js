@@ -13,6 +13,11 @@ const alValidator = require('../../middlewares/validation/accesslevel/accessleve
 
 const router = express.Router();
 
+router.get('/users', async (req, res) => {
+  const userlist = await db.select().from('userdata');
+  return res.status(200).json(userlist);
+})
+
 router.post('/authorize', validators, async (req, res) => {
   const { login, password } = req.body;
 
