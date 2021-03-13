@@ -1,5 +1,11 @@
 import React from 'react';
 import {useState} from 'react';
+import { Button } from '@material-ui/core';
+import { Input } from '@material-ui/core';
+import { InputLabel } from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+
 import './style.scss';
 /*
 */
@@ -11,29 +17,34 @@ export default function Auth(props){
 
   const onChange = e => setValue({
     ...value,
-    [e.target.name]: e.target.value
+    [e.target.id]: e.target.value
   })
 
   console.log(value);
-  
+
   return(
     <div className="auth_div">
-      <h3 className="title_auth">
+      <Typography className="auth_title" variant="h5" color="primary">
         Авторизация
-      </h3>
-      <label>
-        Логин
-      </label>
-      <input className="form_control" type="text" name="user_name" placeholder="Ваш логин" onChange={onChange}/>
+      </Typography>
+      <FormControl>
+        <InputLabel htmlFor="user_name">
+          Логин
+        </InputLabel>
+        <Input className="form_control" type="text" id="user_name" placeholder="Ваш логин" onChange={onChange}/>
+      </FormControl>
+
+      <FormControl>
+        <InputLabel htmlFor="user_password">
+          Пароль
+        </InputLabel>
+        <Input className="form_control" type="password" id="user_password" placeholder="Ваш пароль" onChange={onChange}/>
+      </FormControl>
+
       
-      <label>
-        Пароль
-      </label>
-      <input className="form_control" type="password" name="user_password" placeholder="Ваш пароль" onChange={onChange}/>
-      
-      <button className="btn">
+      <Button variant="contained" color="primary">
         Войти
-      </button>
+      </Button>
     </div>
   );
 }
