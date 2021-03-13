@@ -12,12 +12,12 @@ exports.up = function(knex) {
       table.string('login').notNullable().unique();
       table.string('password').notNullable();
       table.string('salt').notNullable();
-      table.integer('accessLevel').notNullable();
+      table.string('accessLevel').notNullable();
     });
 };
 
 exports.down = function(knex) {
   return knex.schema
     .dropTable('log')
-    .dropTable('usergroup')
+    .dropTable('userdata')
 };
