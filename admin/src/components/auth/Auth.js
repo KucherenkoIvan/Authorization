@@ -35,14 +35,27 @@ export default function Auth(props){
         <InputLabel htmlFor="user_name">
           Логин
         </InputLabel>
-        <Input className="form_control" type="text" id="user_name" placeholder="Ваш логин" onChange={onChange}/>
+        <Input
+          className="form_control"
+          type="text"
+          id="user_name"
+          placeholder="Ваш логин"
+          onChange={onChange}
+          required
+        />
       </FormControl>
 
       <FormControl>
         <InputLabel htmlFor="user_password">
           Пароль
         </InputLabel>
-        <Input className="form_control" type="password" id="user_password" placeholder="Ваш пароль" onChange={onChange}/>
+        <Input
+          className="form_control"
+          type="password"
+          id="user_password"
+          placeholder="Ваш пароль"
+          onChange={onChange}
+        />
       </FormControl>
 
       <Button variant="contained" color="primary" onClick={onClick}>
