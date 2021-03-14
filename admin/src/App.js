@@ -1,11 +1,14 @@
-import logo from './logo.svg';
-import './App.scss';
 import Auth from './components/auth/Auth';
+import { useSelector } from 'react-redux';
+import './App.scss';
 
 function App() {
+  const isAuthorized = useSelector(state => !!state.auth.token);
   return (
     <div className="App">
-      <Auth/>
+      {!isAuthorized &&
+        (<Auth/>)
+      }
     </div>
   );
 }
