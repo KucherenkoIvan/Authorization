@@ -39,6 +39,7 @@ router.post('/authorize', validators, async (req, res) => {
         id: candidate.id,
         login,
         accessLevel: candidate.accessLevel,
+        salt: candidate.salt
       },
       config.jwtsecret,
       {

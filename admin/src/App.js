@@ -1,14 +1,17 @@
 import Auth from './components/auth/Auth';
+import UserPage from './components/userPage/UserPage';
 import { useSelector } from 'react-redux';
 import './App.scss';
 
 function App() {
-  const isAuthorized = useSelector(state => !!state.auth.token);
+  const accessLevel = useSelector(state => state.auth.data?.accessLevel);
+  const login = useSelector(state => state.auth.data?.login);
+
+  const isAuthorized = !!accessLevel;
+
   return (
     <div className="App">
-      {!isAuthorized &&
-        (<Auth/>)
-      }
+      { isAuthorized ? (<UserPage accessLevel={accessLevel} login={login}/>) : (<Auth/>) }
     </div>
   );
 }

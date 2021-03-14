@@ -1,4 +1,9 @@
-import { LOGIN } from "./actions";
+import { LOGIN, RESET_AUTH } from "./actions";
+import jwt from 'jsonwebtoken';
+
+export function resetAuth() {
+  return async dispatch => dispatch({ type: RESET_AUTH });
+}
 
 export function logIn(payload) {
   return async dispatch => {
@@ -21,7 +26,10 @@ export function logIn(payload) {
       if (!response.ok) {
         throw new Error(data.msg);
       }
-      dispatch({ type: LOGIN, payload: { token: data.token, error: null } });
+      else{
+        const {id, salt, accessLevel} = jwt.decode(data.token);
+        dispatch({ type: LOGIN, payload: { data: {login, id, salt, accessLevel}, error: null } });
+      }
     } catch(e) {
       dispatch({ type: LOGIN, payload: { token: null, error: e } });
     }

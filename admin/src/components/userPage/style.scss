@@ -1,0 +1,27 @@
+.user_page{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-items: stretch;
+}
+
+.user_AppBar{
+  display: flex;
+  justify-content: space-between;
+}
+
+.user_img{
+  object-fit: cover;
+  margin: auto;
+}
+
+.user_content{
+  display: flex;
+  overflow: hidden;
+}
+
+.user_table{
+  width: 100%;
+  height: 100%;
+}
