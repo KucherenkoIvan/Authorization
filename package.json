@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "concurrently \"node ./src/index.js\" \"cd ./admin && npm run start\"",
+    "start": "npm run migrations && concurrently \"node ./src/index.js\" \"cd ./admin && npm run start\"",
+    "start:docker": "npm run docker && npm run migrations && concurrently \"node ./src/index.js\" \"cd ./admin && npm run start\"",
+    "docker": "docker-compose down && docker-compose up -d",
     "dev": "nodemon ./src/index.js",
-    "migrations": "node ./src/migrations.js"
+    "migrations": "npx knex migrate:latest && npx knex seed:run"
   },
   "repository": {
     "type": "git",
