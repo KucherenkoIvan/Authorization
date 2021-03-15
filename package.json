@@ -4,6 +4,7 @@
   "description": "NodeJS authorization module",
   "main": "index.js",
   "scripts": {
+    "deps": "npm i && cd ./admin && npm i",
     "test": "jest",
     "start": "npm run migrations && concurrently \"node ./src/index.js\" \"cd ./admin && npm run start\"",
     "start:docker": "npm run docker && npm run migrations && concurrently \"node ./src/index.js\" \"cd ./admin && npm run start\"",
