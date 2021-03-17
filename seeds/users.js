@@ -24,7 +24,7 @@ exports.seed = async function(knex) {
   ];
 
   for (let i = 0; i < 100 + Math.floor(Math.random() * 100); i++) {
-    const adminChanse = 25; // %
+    const adminChanse = 5; // %
     const randomFactor = Math.floor(Math.random() * 100);
     const type = randomFactor >= 100 - adminChanse ? 'admin' : 'user';
     

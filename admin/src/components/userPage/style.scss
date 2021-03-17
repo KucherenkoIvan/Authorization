@@ -17,8 +17,12 @@
 }
 
 .user_content{
+  height: 800px;
   display: flex;
-  overflow: hidden;
+}
+
+.user_content > img {
+  height: 80%;
 }
 
 .user_table{
