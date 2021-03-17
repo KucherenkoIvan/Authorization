@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { logIn } from '../../redux/actionCreators';
+import { useDispatch, useSelector } from 'react-redux';
+import { logIn, resetAuth } from '../../redux/actionCreators';
 import {
   Button,
   Input,
@@ -13,21 +13,37 @@ import './style.scss';
 
 export default function Auth(props){
   const dispatch = useDispatch();
+  const error = useSelector(state => !!state.auth.error);
+  
   const [value, setValue] = useState({
     user_name: "",
     user_password: ""
   });
 
-  const onChange = e => setValue({
-    ...value,
-    [e.target.id]: e.target.value
-  })
+  const onChange = e => {
+    if (error) {
+      dispatch(resetAuth());
+    }
+    
+    setValue({
+      ...value,
+      [e.target.id]: e.target.value
+    })
+  }
+
   const onClick = () => {
     dispatch(logIn({ login: value.user_name, password: value.user_password }));
   }
 
+  const onClickEnter = e => {
+    console.log(e);
+    if (e.code?.includes("Enter")) {
+      onClick();
+    }
+  }
+
   return(
-    <div className="auth_div">
+    <div className={`auth_div ${error ? "redShadow" : "blackShadow"}`}  onKeyDownCapture={onClickEnter}>
       <Typography className="auth_title" variant="h5" color="primary">
         Вход в систему
       </Typography>
@@ -42,6 +58,7 @@ export default function Auth(props){
           placeholder="Ваш логин"
           onChange={onChange}
           required
+          error={error}
         />
       </FormControl>
 
@@ -55,9 +72,9 @@ export default function Auth(props){
           id="user_password"
           placeholder="Ваш пароль"
           onChange={onChange}
+          error={error}
         />
       </FormControl>
-
       <Button variant="contained" color="primary" onClick={onClick}>
         Войти
       </Button>

@@ -4,7 +4,16 @@
   max-width: 300px;
   max-height: 300px;
   gap: 10px;
-  box-shadow: 0px 0px 30px gray;
   padding: 30px;
   border-radius: 10px;
+}
+
+.blackShadow{
+  box-shadow: 0px 0px 30px gray;
+  transition: 0.2s ease;
+}
+
+.redShadow{
+  box-shadow: 0px 0px 30px crimson;
+  transition: 0.2s ease;
 }
