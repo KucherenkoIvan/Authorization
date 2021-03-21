@@ -1,4 +1,4 @@
-const P = require('./password');
+const P = require('./password').middleware;
 
 describe('Testing password validation:', () => {
   const next = () => 42;

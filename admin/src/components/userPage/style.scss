@@ -44,8 +44,14 @@
 
     &_buttons {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-evenly;
       align-items: center;
+      gap: 10px;
+
+      &_btn {
+        width: -webkit-fill-available;
+        width: -moz-fill-available;
+      }
     }
   }
 }

@@ -22,7 +22,7 @@ function validate(password) {
   return Boolean(arr.find(ch => alphabet.includes(ch)) && arr.find(ch => ALPHABET.includes(ch)) && arr.find(ch => !isNaN(+ch)));
 }
 
-module.exports = (req, res, next) => {
+module.exports.middleware = (req, res, next) => {
   const pwd = req.body && req.body.password;
   if (pwd) {
     if (validate(pwd)) {
@@ -34,3 +34,5 @@ module.exports = (req, res, next) => {
     return res.status(500).json(new Error('Validation error: no password provided'));
   }
 }
+
+module.exports.validate = validate;

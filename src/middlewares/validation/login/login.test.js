@@ -1,4 +1,4 @@
-const P = require('./login');
+const P = require('./login').middleware;
 
 describe('Testing login validation:', () => {
   const next = () => 42;

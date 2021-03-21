@@ -18,7 +18,7 @@ function validate(login) {
   return true;
 }
 
-module.exports = (req, res, next) => {
+module.exports.middleware = (req, res, next) => {
   const login = req.body && req.body.login;
   if (login) {
     if (validate(login)) {
@@ -30,3 +30,5 @@ module.exports = (req, res, next) => {
     return res.status(500).json(new Error('Validation error: no login provided'));
   }
 }
+
+module.exports.validate = validate;

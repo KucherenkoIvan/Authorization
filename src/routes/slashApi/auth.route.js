@@ -5,12 +5,15 @@ const db = require('../../db');
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config.json');
 
-const validators = [
-  require('../../middlewares/validation/password/password'),
-  require('../../middlewares/validation/login/login'),
+const middlewares = [
+  require('../../middlewares/validation/password/password').middleware,
+  require('../../middlewares/validation/login/login').middleware,
 ]
-const alValidator = require('../../middlewares/validation/accesslevel/accesslevel');
-const password = require('../../middlewares/validation/password/password');
+
+const validators = {
+  password: require('../../middlewares/validation/password/password').validate,
+  login: require('../../middlewares/validation/login/login').validate,
+}
 
 const router = express.Router();
 
@@ -32,17 +35,29 @@ const hashPassword = async (password, salt) => {
   return [pwdHash, salt];
 }
 
-router.patch('/edit', validators, async (req, res) => {
+router.patch('/edit', async (req, res) => {
+  console.log(req.body)
   const { id, login, password, accessLevel } = req.body;
+
+  if (!!login && !validators.login(login)) {
+    return res.status(500).json({
+      msg: 'Неверный логин',
+    })
+  }
+  if (!!password && !validators.password(password)) {
+    return res.status(500).json({
+      msg: 'Неверный пароль',
+    })
+  }
 
   const candidate = (await db.select().from('userdata').where('id', '=', id))[0];
 
-  const [pwdHash] = await hashPassword(password, candidate.salt);
+  const [pwdHash] = !!password ? await hashPassword(password, candidate.salt) : [candidate.password];
 
   const responseData = (
     await db('userdata')
     .where({ id })
-    .update({ login, password: pwdHash, accessLevel })
+    .update({ login: login || candidate.login, password: pwdHash, accessLevel: accessLevel || candidate.accessLevel })
   );
   
   res.status(200).json({
@@ -64,7 +79,7 @@ router.delete('/delete', async (req, res) => {
   });
 })
 
-router.post('/authorize', validators, async (req, res) => {
+router.post('/authorize', middlewares, async (req, res) => {
   const { login, password } = req.body;
 
   const candidate = (await db.select().from('userdata').where('login', '=', login))[0];
@@ -100,12 +115,12 @@ router.post('/authorize', validators, async (req, res) => {
     });
 });
 
-router.post('/register', validators, async (req, res) => {
-  const { login, password } = req.body;
+router.post('/register', middlewares, async (req, res) => {
+  const { login, password, accessLevel } = req.body;
   
   const [pwdHash, salt] = await hashPassword(password);
 
-  const newUser = await db.insert({ login, password: pwdHash, salt, accessLevel: 'user' }).into('userdata');
+  const newUser = await db.insert({ login, password: pwdHash, salt, accessLevel }).into('userdata');
   res.status(200).json({ newUser });
 });
 
