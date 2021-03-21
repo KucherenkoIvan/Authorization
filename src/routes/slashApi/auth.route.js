@@ -10,12 +10,58 @@ const validators = [
   require('../../middlewares/validation/login/login'),
 ]
 const alValidator = require('../../middlewares/validation/accesslevel/accesslevel');
+const password = require('../../middlewares/validation/password/password');
 
 const router = express.Router();
 
 router.get('/users', async (req, res) => {
   const userlist = await db.select().from('userdata');
   return res.status(200).json(userlist);
+})
+
+const hashPassword = async (password, salt) => {
+
+  if (!salt) {
+    salt = await bcrypt.genSalt(42);
+  }
+
+  const saltPwd = password + config.staticSalt + salt;
+
+  const pwdHash = await argon.hash(saltPwd);
+
+  return [pwdHash, salt];
+}
+
+router.patch('/edit', validators, async (req, res) => {
+  const { id, login, password, accessLevel } = req.body;
+
+  const candidate = (await db.select().from('userdata').where('id', '=', id))[0];
+
+  const [pwdHash] = await hashPassword(password, candidate.salt);
+
+  const responseData = (
+    await db('userdata')
+    .where({ id })
+    .update({ login, password: pwdHash, accessLevel })
+  );
+  
+  res.status(200).json({
+    msg: responseData
+  });
+})
+
+router.delete('/delete', async (req, res) => {
+  const { id } = req.body;
+  
+  const candidate = (
+    await db('userdata')
+    .where('id', '=', id)
+    .del()
+  );
+
+  res.status(200).json({
+    msg: candidate
+  });
 })
 
 router.post('/authorize', validators, async (req, res) => {
@@ -57,13 +103,9 @@ router.post('/authorize', validators, async (req, res) => {
 router.post('/register', validators, async (req, res) => {
   const { login, password } = req.body;
   
-  const customSalt = await bcrypt.genSalt(42);
+  const [pwdHash, salt] = await hashPassword(password);
 
-  const saltPwd = password + config.staticSalt + customSalt;
-
-  const pwdHash = await argon.hash(saltPwd);
-
-  const newUser = await db.insert({ login, password: pwdHash, salt: customSalt, accessLevel: 'user' }).into('userdata');
+  const newUser = await db.insert({ login, password: pwdHash, salt, accessLevel: 'user' }).into('userdata');
   res.status(200).json({ newUser });
 });
 
