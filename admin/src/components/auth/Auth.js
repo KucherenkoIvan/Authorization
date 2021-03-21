@@ -7,7 +7,7 @@ import {
   Input,
   InputLabel,
   FormControl,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import './style.scss';
 
@@ -36,7 +36,6 @@ export default function Auth(props) {
   }
 
   const onClickEnter = e => {
-    console.log(e);
     if (e.code?.includes("Enter")) {
       onClick();
     }
