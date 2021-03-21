@@ -5,6 +5,8 @@ const db = require('../../db');
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config.json');
 
+const authMiddleware = require('../../middlewares/auth/auth')
+
 const middlewares = [
   require('../../middlewares/validation/password/password').middleware,
   require('../../middlewares/validation/login/login').middleware,
@@ -35,7 +37,7 @@ const hashPassword = async (password, salt) => {
   return [pwdHash, salt];
 }
 
-router.patch('/edit', async (req, res) => {
+router.patch('/edit', authMiddleware, async (req, res) => {
   console.log(req.body)
   const { id, login, password, accessLevel } = req.body;
 
@@ -65,7 +67,7 @@ router.patch('/edit', async (req, res) => {
   });
 })
 
-router.delete('/delete', async (req, res) => {
+router.delete('/delete', authMiddleware, async (req, res) => {
   const { id } = req.body;
   
   const candidate = (
@@ -115,7 +117,8 @@ router.post('/authorize', middlewares, async (req, res) => {
     });
 });
 
-router.post('/register', middlewares, async (req, res) => {
+router.post('/register', middlewares, authMiddleware, async (req, res) => {
+  console.log(req.body);
   const { login, password, accessLevel } = req.body;
   
   const [pwdHash, salt] = await hashPassword(password);
