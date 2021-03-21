@@ -11,10 +11,10 @@ import {
 } from '@material-ui/core';
 import './style.scss';
 
-export default function Auth(props){
+export default function Auth(props) {
   const dispatch = useDispatch();
   const error = useSelector(state => !!state.auth.error);
-  
+
   const [value, setValue] = useState({
     user_name: "",
     user_password: ""
@@ -24,7 +24,7 @@ export default function Auth(props){
     if (error) {
       dispatch(resetAuth());
     }
-    
+
     setValue({
       ...value,
       [e.target.id]: e.target.value
@@ -42,8 +42,8 @@ export default function Auth(props){
     }
   }
 
-  return(
-    <div className={`auth_div ${error ? "redShadow" : "blackShadow"}`}  onKeyDownCapture={onClickEnter}>
+  return (
+    <div className={`auth_div ${error ? "redShadow" : "blackShadow"}`} onKeyDownCapture={onClickEnter}>
       <Typography className="auth_title" variant="h5" color="primary">
         Вход в систему
       </Typography>
