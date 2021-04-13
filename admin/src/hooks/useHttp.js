@@ -1,42 +1,53 @@
-import React, { useCallback, useState } from 'react';
+import Axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export const useHttp = () => {
-  const request = async (url, method, headers, body) => {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/json',
-          ...headers
-        },
-        method,
-        body
-      });
-      const json = await response.json();
-      return json;
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  const token = useSelector(state => state.auth.data.token);
+  const axios = Axios.create({ headers: { authorization: token } });
 
   const get = async url => {
-    const result = await request(url, 'GET');
+    let result;
+    try {
+      result = await axios.get(url);
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
     return result;
   }
 
   const post = async (url, body) => {
-    const result = await request(url, 'POST', { }, JSON.stringify(body));
+    let result;
+    try {
+      result = await axios.post(url, body);
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
     return result;
   }
 
   const patch = async (url, body) => {
-    const result = await request(url, 'PATCH', { }, JSON.stringify(body));
+    let result;
+    try {
+      result = await axios.patch(url, body);
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
     return result;
   }
 
   const del = async (url, body) => {
-    const result = await request(url, 'DELETE', { }, JSON.stringify(body));
+    let result;
+    try {
+      result = await axios.delete(url, body);
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
     return result;
   }
 
-  return { request, get, post, patch, del };
+  return { get, post, patch, del };
 };

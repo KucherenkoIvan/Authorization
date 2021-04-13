@@ -19,8 +19,8 @@ exports.seed = async function(knex) {
   }
 
   const users = [
-    {id: 1, login: 'admin', password: adminPassword, salt: adminSalt, accessLevel: 'admin' },
-    {id: 2, login: 'user', password: userPassword, salt: userSalt, accessLevel: 'user' },
+    { login: 'admin', password: adminPassword, salt: adminSalt, accessLevel: 'admin' },
+    { login: 'user', password: userPassword, salt: userSalt, accessLevel: 'user' },
   ];
 
   for (let i = 0; i < 100 + Math.floor(Math.random() * 100); i++) {
@@ -30,7 +30,7 @@ exports.seed = async function(knex) {
     
     const login = type + i + Math.floor(Math.random() * 1e4);
     const pwdData = await getPwdData('F' + login);
-    users.push({id: i + 3, login, ...pwdData, accessLevel: type });
+    users.push({ login, ...pwdData, accessLevel: type });
   }
 
   // Deletes ALL existing entries

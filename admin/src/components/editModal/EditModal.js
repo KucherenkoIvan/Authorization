@@ -22,6 +22,7 @@ export default function EditModal(){
   const dispatch = useDispatch();
   const { patch, del, post } = useHttp();
 
+  const [errors, setErrors] = useState([]);
   const isOpen = useSelector(state => state.modals?.editModal?.isOpen);
   const selectedRow = useSelector(state => state.modals?.editModal?.selectedRow);
 
@@ -32,8 +33,11 @@ export default function EditModal(){
     accessLevel: 'user',
   });
 
+  console.log(errors)
+
   const closeHandler = () => {
     setFocused('');
+    setErrors([]);
     setInputData({
       login: '',
       password: '',
@@ -65,15 +69,28 @@ export default function EditModal(){
 
   const saveClickHandler = async () => {
     // PATCH /api/auth/edit {login, password, id, accesLevel}
+    const err = [];
     if (selectedRow) {
       const preparedData = { ...inputData, id: selectedRow.id };
-      console.log(preparedData)
-      await patch('/api/auth/edit', preparedData);
+      try {
+        await patch('/api/auth/edit', preparedData);        
+      } catch (e) {
+        // добавить ошибку
+        err.push(e);
+      }
     } else {
-      await post('/api/auth/register', inputData);
+      try {
+        await post('/api/auth/register', inputData);
+      } catch (e) {
+        // добавить ошибку
+        err.push(e);
+      }
     }
-    dispatch(loadUsers());
-    closeHandler();
+    setErrors(err);
+    if (!errors.length) {
+      dispatch(loadUsers());
+      closeHandler();
+    }
   };
 
   const deleteClickHandler = () => {
@@ -102,7 +119,7 @@ export default function EditModal(){
         <IconButton className="user_icon" onClick={closeHandler}>
           <CancelTwoToneIcon color="action" className="white-text" />
         </IconButton>
-        <div className="auth_div blackShadow">
+        <div className={`auth_div ${errors.length ? 'redShadow' : 'blackShadow'}`}>
           <Typography variant="h6">
             {selectedRow ? "Редактирование" : "Новый пользователь"}
           </Typography>
@@ -129,7 +146,7 @@ export default function EditModal(){
             </InputLabel>
             <Input
               className="form_control"
-              type="text"
+              type="password"
               id="password"
               placeholder="Только не Qwerty123"
               onChange={changeHandler}

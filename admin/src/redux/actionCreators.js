@@ -26,7 +26,7 @@ export function logIn(payload) {
       }
       else{
         const {id, salt, accessLevel} = jwt.decode(data.token);
-        dispatch({ type: LOGIN, payload: { data: {login, id, salt, accessLevel}, error: null } });
+        dispatch({ type: LOGIN, payload: { data: {login, id, salt, accessLevel, token: data.token}, error: null } });
       }
     } catch(e) {
       dispatch({ type: LOGIN, payload: { token: null, error: e } });
