@@ -39,8 +39,6 @@ export default function EditModal() {
     accessLevel: "user",
   });
 
-  console.log(errors);
-
   const closeHandler = () => {
     setFocused("");
     setErrors([]);
@@ -100,11 +98,15 @@ export default function EditModal() {
     }
   };
 
-  const deleteClickHandler = () => {
+  const deleteClickHandler = async () => {
     if (selectedRow) {
-      del("/api/auth/delete", { id: selectedRow.id });
-      dispatch(loadUsers());
-      closeHandler();
+      try {
+        const _ = await del(`/api/auth/delete/?id=${selectedRow.id}`, { id: selectedRow.id });
+        dispatch(loadUsers());
+        closeHandler();
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 

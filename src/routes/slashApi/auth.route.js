@@ -37,7 +37,6 @@ const hashPassword = async (password, salt) => {
 };
 
 router.patch("/edit", authMiddleware, async (req, res) => {
-  console.log(req.body);
   const { id, login, password, accessLevel } = req.body;
 
   if (!!login && !validators.login(login)) {
@@ -73,7 +72,7 @@ router.patch("/edit", authMiddleware, async (req, res) => {
 });
 
 router.delete("/delete", authMiddleware, async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.query;
 
   const candidate = await db("userdata").where("id", "=", id).del();
 
@@ -120,7 +119,6 @@ router.post("/authorize", middlewares, async (req, res) => {
 });
 
 router.post("/register", middlewares, authMiddleware, async (req, res) => {
-  console.log(req.body);
   const { login, password, accessLevel } = req.body;
 
   const [pwdHash, salt] = await hashPassword(password);
