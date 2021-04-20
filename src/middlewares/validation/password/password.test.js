@@ -1,71 +1,70 @@
-const P = require('./password').middleware;
+const P = require("./password").middleware;
 
-describe('Testing password validation:', () => {
+describe("Testing password validation:", () => {
   const next = () => 42;
-  const buildReq = req => ({ body: { password: req } });
+  const buildReq = (req) => ({ body: { password: req } });
   const res = {
-    status: jest.fn(code => res),
-    json: jest.fn(obj => res)
+    status: jest.fn((code) => res),
+    json: jest.fn((obj) => res),
   };
 
-  test('No password provided', () => {
+  test("No password provided", () => {
     P({}, res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalled();
   });
 
-  test('Length < 4', () => {
+  test("Length < 4", () => {
     P(buildReq("Ab2"), res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalled();
   });
 
-  test('Length > 32', () => {
+  test("Length > 32", () => {
     P(buildReq("Aa23Aa23Aa23Aa23Aa23Aa23Aa23Aa23Aa23Aa23Aa23"), res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalled();
   });
 
-  test('Lowercase only', () => {
+  test("Lowercase only", () => {
     P(buildReq("4abc"), res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalled();
   });
 
-  test('Uppercase only', () => {
+  test("Uppercase only", () => {
     P(buildReq("4ABC"), res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalled();
   });
-    
-  test('Letters only', () => {
+
+  test("Letters only", () => {
     P(buildReq("AbCd"), res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalled();
   });
 
-  test('No numbers', () => {
+  test("No numbers", () => {
     P(buildReq("Ab!&"), res, next);
-    
+
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalled();
   });
-    
-  test('Forbiden symbols', () => {
+
+  test("Forbiden symbols", () => {
     P(buildReq("Ab2ж"), res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalled();
   });
-    
-  test('Correct case', () => {
+
+  test("Correct case", () => {
     expect(P(buildReq("S4mpl3_Passw0rd"), res, next)).toBe(42);
   });
-})
-
+});

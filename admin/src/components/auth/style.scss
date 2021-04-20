@@ -1,4 +1,4 @@
-.auth_div{
+.auth_div {
   display: flex;
   flex-flow: column nowrap;
   max-width: 300px;
@@ -9,12 +9,12 @@
   background-color: white;
 }
 
-.blackShadow{
+.blackShadow {
   box-shadow: 0px 0px 30px gray;
   transition: 0.2s ease;
 }
 
-.redShadow{
+.redShadow {
   box-shadow: 0px 0px 30px crimson;
   transition: 0.2s ease;
 }

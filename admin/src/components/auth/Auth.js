@@ -1,55 +1,56 @@
-import React from 'react';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { logIn, resetAuth } from '../../redux/actionCreators';
+import React from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { logIn, resetAuth } from "../../redux/actionCreators";
 import {
   Button,
   Input,
   InputLabel,
   FormControl,
   Typography,
-} from '@material-ui/core';
-import './style.scss';
+} from "@material-ui/core";
+import "./style.scss";
 
 export default function Auth(props) {
   const dispatch = useDispatch();
-  const error = useSelector(state => !!state.auth.error);
+  const error = useSelector((state) => !!state.auth.error);
 
   const [value, setValue] = useState({
     user_name: "",
-    user_password: ""
+    user_password: "",
   });
 
-  const onChange = e => {
+  const onChange = (e) => {
     if (error) {
       dispatch(resetAuth());
     }
 
     setValue({
       ...value,
-      [e.target.id]: e.target.value
-    })
-  }
+      [e.target.id]: e.target.value,
+    });
+  };
 
   const onClick = () => {
     dispatch(logIn({ login: value.user_name, password: value.user_password }));
-  }
+  };
 
-  const onClickEnter = e => {
+  const onClickEnter = (e) => {
     if (e.code?.includes("Enter")) {
       onClick();
     }
-  }
+  };
 
   return (
-    <div className={`auth_div ${error ? "redShadow" : "blackShadow"}`} onKeyDownCapture={onClickEnter}>
+    <div
+      className={`auth_div ${error ? "redShadow" : "blackShadow"}`}
+      onKeyDownCapture={onClickEnter}
+    >
       <Typography className="auth_title" variant="h5" color="primary">
         Вход в систему
       </Typography>
       <FormControl>
-        <InputLabel htmlFor="user_name">
-          Логин
-        </InputLabel>
+        <InputLabel htmlFor="user_name">Логин</InputLabel>
         <Input
           className="form_control"
           type="text"
@@ -62,9 +63,7 @@ export default function Auth(props) {
       </FormControl>
 
       <FormControl>
-        <InputLabel htmlFor="user_password">
-          Пароль
-        </InputLabel>
+        <InputLabel htmlFor="user_password">Пароль</InputLabel>
         <Input
           className="form_control"
           type="password"

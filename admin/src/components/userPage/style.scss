@@ -11,17 +11,17 @@
     justify-items: stretch;
   }
 
-  &_img{
+  &_img {
     object-fit: cover;
     margin: auto;
   }
 
-  &_AppBar{
+  &_AppBar {
     display: flex;
     justify-content: space-between;
   }
 
-  &_content{
+  &_content {
     height: 800px;
     display: flex;
 
@@ -30,7 +30,7 @@
     }
   }
 
-  &_table{
+  &_table {
     width: 100%;
     height: 100%;
   }

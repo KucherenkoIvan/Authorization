@@ -9,12 +9,15 @@ function validate(login) {
     return false;
   }
 
-  const arr = login.split('').filter(ch => alphabet.includes(ch) || !Number.isNaN(+ch)); // login to char array
+  const arr = login
+    .split("")
+    .filter((ch) => alphabet.includes(ch) || !Number.isNaN(+ch)); // login to char array
 
-  if (arr.length !== login.length) { // login contains forbiden symbols
+  if (arr.length !== login.length) {
+    // login contains forbiden symbols
     return false;
   }
-  
+
   return true;
 }
 
@@ -24,11 +27,13 @@ module.exports.middleware = (req, res, next) => {
     if (validate(login)) {
       return next();
     } else {
-      return res.status(500).json(new Error('Validation error: invalid login'));
+      return res.status(500).json(new Error("Validation error: invalid login"));
     }
   } else {
-    return res.status(500).json(new Error('Validation error: no login provided'));
+    return res
+      .status(500)
+      .json(new Error("Validation error: no login provided"));
   }
-}
+};
 
 module.exports.validate = validate;

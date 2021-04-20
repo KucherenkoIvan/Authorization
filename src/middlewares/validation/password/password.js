@@ -13,13 +13,23 @@ function validate(password) {
     return false;
   }
 
-  const arr = password.split('').filter(ch => [...alphabet, ...ALPHABET, ...extras].includes(ch) || !Number.isNaN(+ch)); // password to char array
+  const arr = password
+    .split("")
+    .filter(
+      (ch) =>
+        [...alphabet, ...ALPHABET, ...extras].includes(ch) || !Number.isNaN(+ch)
+    ); // password to char array
 
-  if (arr.length !== password.length) { // password contains forbiden symbols
+  if (arr.length !== password.length) {
+    // password contains forbiden symbols
     return false;
   }
-  
-  return Boolean(arr.find(ch => alphabet.includes(ch)) && arr.find(ch => ALPHABET.includes(ch)) && arr.find(ch => !isNaN(+ch)));
+
+  return Boolean(
+    arr.find((ch) => alphabet.includes(ch)) &&
+      arr.find((ch) => ALPHABET.includes(ch)) &&
+      arr.find((ch) => !isNaN(+ch))
+  );
 }
 
 module.exports.middleware = (req, res, next) => {
@@ -28,11 +38,15 @@ module.exports.middleware = (req, res, next) => {
     if (validate(pwd)) {
       return next();
     } else {
-      return res.status(500).json(new Error('Validation error: invalid password'));
+      return res
+        .status(500)
+        .json(new Error("Validation error: invalid password"));
     }
   } else {
-    return res.status(500).json(new Error('Validation error: no password provided'));
+    return res
+      .status(500)
+      .json(new Error("Validation error: no password provided"));
   }
-}
+};
 
 module.exports.validate = validate;
